@@ -1,6 +1,11 @@
 @base = http://localhost:3000/api
+@categoryId = 6b08c3eb3f29271bd18b49ff
+@eventId = 6b08c4ed3f29271bd18b4a00
+@userId = PEGAR_ID_USUARIO
 
-### Registro
+############ AUTH ############
+
+### Registro juan
 POST {{base}}/auth/register
 Content-Type: application/json
 
@@ -16,24 +21,6 @@ Content-Type: application/json
   }
 }
 
-### Login
-POST {{base}}/auth/login
-Content-Type: application/json
-
-{
-  "email": "juan@mail.com",
-  "password": "Juan1234"
-}
-
-### Perfil
-GET {{base}}/auth/profile
-
-### Logout
-POST {{base}}/auth/logout
-
-### Listar usuarios (solo admin)
-GET {{base}}/users
-
 ### Registro admin
 POST {{base}}/auth/register
 Content-Type: application/json
@@ -45,6 +32,26 @@ Content-Type: application/json
   "profile": { "firstName": "Admin", "lastName": "Principal" }
 }
 
+### Registro inválido (400)
+POST {{base}}/auth/register
+Content-Type: application/json
+
+{
+  "username": "j!",
+  "email": "no-es-email",
+  "password": "abc",
+  "profile": { "firstName": "J1" }
+}
+
+### Login juan
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "juan@mail.com",
+  "password": "Juan1234"
+}
+
 ### Login admin
 POST {{base}}/auth/login
 Content-Type: application/json
@@ -53,3 +60,122 @@ Content-Type: application/json
   "email": "admin@mail.com",
   "password": "Admin1234"
 }
+
+### Perfil
+GET {{base}}/auth/profile
+
+### Actualizar perfil (solo el campo enviado)
+PUT {{base}}/auth/profile
+Content-Type: application/json
+
+{
+  "profile": { "phone": "3704999999" }
+}
+
+### Logout
+POST {{base}}/auth/logout
+
+############ CATEGORIES ############
+
+### Crear categoría (solo admin)
+POST {{base}}/categories
+Content-Type: application/json
+
+{
+  "name": "Música",
+  "description": "Recitales y festivales"
+}
+
+### Listar categorías
+GET {{base}}/categories
+
+### Categoría con sus eventos (virtual populate)
+GET {{base}}/categories/{{categoryId}}
+
+### Actualizar categoría (solo admin)
+PUT {{base}}/categories/{{categoryId}}
+Content-Type: application/json
+
+{
+  "description": "Recitales, festivales y peñas"
+}
+
+### Eliminar categoría (solo admin) → se quita de todos los eventos
+DELETE {{base}}/categories/{{categoryId}}
+
+############ EVENTS ############
+
+### Crear evento (organizer = usuario logueado)
+POST {{base}}/events
+Content-Type: application/json
+
+{
+  "title": "Recital en Formosa",
+  "description": "Un recital al aire libre con bandas locales",
+  "startDate": "2026-12-10T20:00:00Z",
+  "endDate": "2026-12-10T23:00:00Z",
+  "capacity": 200,
+  "price": 1500,
+  "location": {
+    "venue": "Paseo Costanero",
+    "address": "Av. Costanera 100",
+    "city": "Formosa"
+  },
+  "categories": ["{{categoryId}}"]
+}
+
+### Evento inválido (400)
+POST {{base}}/events
+Content-Type: application/json
+
+{
+  "title": "Evento mal cargado",
+  "description": "La fecha de fin es anterior al inicio",
+  "startDate": "2026-12-10",
+  "endDate": "2026-12-09",
+  "capacity": 0,
+  "location": { "venue": "Club", "address": "Calle 123", "city": "Formosa" }
+}
+
+### Listar eventos
+GET {{base}}/events
+
+### Mis eventos
+GET {{base}}/events/my
+
+### Obtener evento
+GET {{base}}/events/{{eventId}}
+
+### Actualizar evento 
+PUT {{base}}/events/{{eventId}}
+Content-Type: application/json
+
+{
+  "capacity": 300,
+  "location": { "city": "Clorinda" }
+}
+
+### Eliminar evento 
+DELETE {{base}}/events/{{eventId}}
+
+### Id inválido (400)
+GET {{base}}/events/123
+
+############ USERS (solo admin) ############
+
+### Listar usuarios
+GET {{base}}/users
+
+### Obtener usuario
+GET {{base}}/users/{{userId}}
+
+### Actualizar usuario
+PUT {{base}}/users/{{userId}}
+Content-Type: application/json
+
+{
+  "profile": { "lastName": "Pereyra" }
+}
+
+### Eliminación lógica + cascada de sus eventos
+DELETE {{base}}/users/{{userId}}
