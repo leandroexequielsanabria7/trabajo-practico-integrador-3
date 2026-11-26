@@ -30,3 +30,26 @@ GET {{base}}/auth/profile
 
 ### Logout
 POST {{base}}/auth/logout
+
+### Listar usuarios (solo admin)
+GET {{base}}/users
+
+### Registro admin
+POST {{base}}/auth/register
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "email": "admin@mail.com",
+  "password": "Admin1234",
+  "profile": { "firstName": "Admin", "lastName": "Principal" }
+}
+
+### Login admin
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@mail.com",
+  "password": "Admin1234"
+}
