@@ -1,0 +1,32 @@
+@base = http://localhost:3000/api
+
+### Registro
+POST {{base}}/auth/register
+Content-Type: application/json
+
+{
+  "username": "juan",
+  "email": "juan@mail.com",
+  "password": "Juan1234",
+  "profile": {
+    "firstName": "Juan",
+    "lastName": "Pérez",
+    "birthDate": "1995-05-10",
+    "phone": "3704123456"
+  }
+}
+
+### Login
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "juan@mail.com",
+  "password": "Juan1234"
+}
+
+### Perfil
+GET {{base}}/auth/profile
+
+### Logout
+POST {{base}}/auth/logout
