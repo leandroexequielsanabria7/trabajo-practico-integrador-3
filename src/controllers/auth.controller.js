@@ -3,6 +3,7 @@ import { UserModel } from "../models/user.model.js";
 import { hashPassword, comparePassword } from "../helpers/bcrypt.helper.js";
 import { generateToken } from "../helpers/jwt.helper.js";
 import { toDotNotation } from "../helpers/update.helper.js";
+import "../models/event.model.js";
 
 const cookieOptions = {
   httpOnly: true, 
